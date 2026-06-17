@@ -6,4 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: '/w3dding-gallery/',
+  server: {
+    host: '0.0.0.0',
+  },
 })
