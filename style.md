@@ -46,6 +46,7 @@ To complement the monochrome foundation, the design system integrates desaturate
 To maintain clarity across multilingual layouts, all collateral must adhere to this tiered font pairing strategy.
 
 ### 3.1 Structural Foundations (English)
+
 * **Tier 1: Display / High-Impact Headers**
   * **Classification:** Clean, geometric Sans-Serif (e.g., Montserrat, Helvetica Neue, or Avant Garde).
   * **Layout Rules:** All caps, tracking set to wide (+150 to +200), bold weight. Reserved for primary announcements, couple identifiers, and cover page anchors.
