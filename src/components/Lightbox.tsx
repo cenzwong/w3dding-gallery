@@ -17,7 +17,6 @@ interface LightboxProps {
 }
 
 export default function Lightbox({ album, onClose, id = "lightbox-modal" }: LightboxProps) {
-  // Lock body scroll when lightbox is open
   useEffect(() => {
     if (album) {
       document.body.style.overflow = "hidden";
@@ -27,7 +26,6 @@ export default function Lightbox({ album, onClose, id = "lightbox-modal" }: Ligh
     };
   }, [album]);
 
-  // Handle escape key to close
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -45,61 +43,63 @@ export default function Lightbox({ album, onClose, id = "lightbox-modal" }: Ligh
   return (
     <motion.div
       id={id}
-      className="lightbox-backdrop"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="fixed inset-0 z-50 bg-[var(--bg-primary)] flex flex-col"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="lightbox-title-id"
     >
-      <div className="lightbox-header">
-        <h2 id="lightbox-title-id" className="lightbox-title">
-          {album.title}
+      <div className="flex justify-between items-center p-6 border-b border-[var(--border-color)]">
+        <h2 id="lightbox-title-id" className="text-xl md:text-2xl display-text font-normal text-[var(--text-primary)]">
+          {album.titleTc} <span className="mx-2 text-[var(--border-color)]">|</span> {album.title}
         </h2>
         <button
           id="close-lightbox"
-          className="lightbox-close-btn"
+          className="w-12 h-12 flex items-center justify-center rounded-full bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-[var(--accent)] hover:text-white transition-colors duration-300"
           onClick={onClose}
           aria-label="Close gallery"
           title="Close (Esc)"
         >
-          <X size={20} />
+          <X size={20} strokeWidth={1.5} />
         </button>
       </div>
 
-      <div className="lightbox-container">
+      <div className="flex-1 overflow-hidden relative">
         <motion.div
           style={{ width: "100%", height: "100%" }}
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
         >
           <Swiper
             modules={[Navigation, Pagination, Keyboard, Mousewheel]}
             navigation={true}
-            pagination={{ clickable: true }}
+            pagination={{ clickable: true, type: "fraction" }}
             keyboard={{ enabled: true }}
             mousewheel={true}
             loop={true}
-            spaceBetween={50}
+            spaceBetween={0}
             slidesPerView={1}
-            className="mySwiper"
+            className="w-full h-full"
           >
             {album.photos.map((photo, index) => (
-              <SwiperSlide key={photo.id}>
-                <div className="swiper-slide-image-wrapper">
+              <SwiperSlide key={photo.id} className="flex flex-col items-center justify-center p-4 md:p-12">
+                <div className="w-full h-[80vh] flex items-center justify-center relative">
                   <img
                     src={photo.url}
                     alt={photo.caption || `${album.title} photo ${index + 1}`}
-                    className="swiper-slide-image"
+                    className="max-w-full max-h-full object-contain"
                     loading="lazy"
                   />
                 </div>
-                {photo.caption && (
-                  <p className="swiper-slide-caption">{photo.caption}</p>
+                {(photo.captionTc || photo.caption) && (
+                  <div className="mt-6 text-center max-w-2xl px-4">
+                    {photo.captionTc && <p className="text-sm text-[var(--text-secondary)] tc-informational mb-1">{photo.captionTc}</p>}
+                    {photo.caption && <p className="text-sm prose-text text-[var(--text-secondary)] italic">{photo.caption}</p>}
+                  </div>
                 )}
               </SwiperSlide>
             ))}
