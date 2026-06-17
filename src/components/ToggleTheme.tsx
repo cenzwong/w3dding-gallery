@@ -22,20 +22,18 @@ export default function ToggleTheme({ id = "theme-toggle" }: ToggleThemeProps) {
   };
 
   return (
-    <div className="theme-toggle-container">
-      <button
-        id={id}
-        className="theme-toggle-btn"
-        onClick={toggleTheme}
-        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
-        title={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
-      >
-        {theme === "light" ? (
-          <Moon size={20} strokeWidth={1.5} />
-        ) : (
-          <Sun size={20} strokeWidth={1.5} />
-        )}
-      </button>
-    </div>
+    <button
+      id={id}
+      className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--text-primary)] transition-all duration-300"
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+      title={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+    >
+      {theme === "light" ? (
+        <Moon size={18} strokeWidth={1.5} />
+      ) : (
+        <Sun size={18} strokeWidth={1.5} />
+      )}
+    </button>
   );
 }

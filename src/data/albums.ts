@@ -1,10 +1,13 @@
 export interface Photo {
+  captionTc?: string;
   id: string;
   url: string;
   caption?: string;
 }
 
 export interface Album {
+  titleTc?: string;
+  descriptionTc?: string;
   id: string;
   title: string;
   description: string;
@@ -16,7 +19,9 @@ export const ALBUMS: Album[] = [
   {
     id: "metro-shooting",
     title: "Metro Shooting",
+    titleTc: "都會寫真",
     description: "Our elegant pre-wedding shoot captured in urban and metro-themed environments.",
+    descriptionTc: "城市霓虹與我們最愛角落的坦率瞬間。",
     coverImage: "https://lh3.googleusercontent.com/d/1nAJ7vYBUSMevCDhGWOQBbQA4ozvI6D4f",
     photos: [
       { id: "ms-1", url: "https://lh3.googleusercontent.com/d/1nAJ7vYBUSMevCDhGWOQBbQA4ozvI6D4f", caption: "Metro Shooting - Photo 1" },
@@ -76,7 +81,9 @@ export const ALBUMS: Album[] = [
   {
     id: "wedding-shooting",
     title: "Wedding Shooting",
+    titleTc: "婚禮紀實",
     description: "Our elegant wedding day portraits and beautiful moments captured together.",
+    descriptionTc: "婚禮當日的優雅剪影與我們共同捕捉的美好時刻。",
     coverImage: "https://lh3.googleusercontent.com/d/1B490VJslIZPum472xRxYFu8EZGpEihqK",
     photos: [
       { id: "ws-1", url: "https://lh3.googleusercontent.com/d/1B490VJslIZPum472xRxYFu8EZGpEihqK", caption: "Wedding Shooting - Photo 1" },

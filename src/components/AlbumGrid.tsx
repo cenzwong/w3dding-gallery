@@ -1,6 +1,5 @@
 import type { Album } from "../data/albums";
 import { motion } from "framer-motion";
-import { ArrowRight, Image as ImageIcon } from "lucide-react";
 
 interface AlbumGridProps {
   albums: Album[];
@@ -9,87 +8,57 @@ interface AlbumGridProps {
 }
 
 export default function AlbumGrid({ albums, onSelectAlbum, id = "album-grid" }: AlbumGridProps) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.4,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 40, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-      },
-    },
-  };
-
-
   return (
-    <section id={id} className="albums-section">
-      <div className="container">
-        <motion.div
-          className="albums-grid"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {albums.map((album) => (
-            <motion.div
-              key={album.id}
-              className="album-card-wrapper"
-              variants={cardVariants}
-              onClick={() => onSelectAlbum(album.id)}
-            >
-              <div
-                className="album-card"
-                id={`album-card-${album.id}`}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    onSelectAlbum(album.id);
-                  }
-                }}
-                aria-label={`Open ${album.title} album`}
-              >
-                <div className="album-image-container">
-                  <img
-                    src={album.coverImage}
-                    alt={`${album.title} cover`}
-                    className="album-image"
-                    loading="lazy"
-                  />
-                </div>
+    <section id={id} className="py-12 md:py-24 px-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-8">
+        {albums.map((album, index) => (
+          <motion.article
+            key={album.id}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{
+              duration: 0.8,
+              delay: index * 0.1,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="group cursor-pointer flex flex-col gap-6"
+            onClick={() => onSelectAlbum(album.id)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                onSelectAlbum(album.id);
+              }
+            }}
+            aria-label={`Open ${album.title} album`}
+          >
+            <div className="aspect-[4/5] w-full overflow-hidden bg-[var(--bg-secondary)] relative">
+               <img
+                  src={album.coverImage}
+                  alt={`${album.title} cover`}
+                  className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                  loading="lazy"
+                />
+            </div>
 
-                <div className="album-card-overlay" />
-
-                <div className="album-card-info">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <ImageIcon size={16} strokeWidth={2} style={{ color: 'var(--accent-gold)' }} />
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-gold)' }}>
-                      {album.photos.length} Photos
-                    </span>
-                  </div>
-                  <h2 className="album-card-title">{album.title}</h2>
-                  <p className="album-card-desc">{album.description}</p>
-                  <span className="album-card-action">
-                    View Gallery <ArrowRight size={14} />
-                  </span>
-                </div>
+            <div className="flex flex-col gap-2 px-1">
+              <div className="flex items-center gap-3">
+                 <h2 className="text-xl md:text-2xl display-text font-normal text-[var(--text-primary)]">
+                    {album.titleTc} <span className="mx-2 text-[var(--border-color)]">|</span> {album.title}
+                 </h2>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+              <p className="text-sm text-[var(--text-secondary)] tc-informational leading-relaxed">
+                 {album.descriptionTc} <br/>
+                 <span className="prose-text italic mt-1 block">{album.description}</span>
+              </p>
+              <div className="mt-4 text-xs tracking-widest uppercase text-[var(--text-secondary)] border-t border-[var(--border-color)] pt-4 flex justify-between items-center group-hover:text-[var(--text-primary)] transition-colors duration-300">
+                <span className="font-mono">{album.photos.length} POSTS</span>
+                <span>EXPLORE &rarr;</span>
+              </div>
+            </div>
+          </motion.article>
+        ))}
       </div>
     </section>
   );
