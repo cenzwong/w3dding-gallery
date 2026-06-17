@@ -4,8 +4,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: 'Montserrat', 'Noto Sans TC', sans-serif;
-  --font-prose: 'EB Garamond', 'Noto Serif TC', serif;
+  --font-display: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
+  --font-prose: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   --color-bg-primary: var(--bg-primary);
@@ -19,8 +19,8 @@
 
 :root {
   /* Fonts */
-  --font-display: 'Montserrat', 'Noto Sans TC', sans-serif;
-  --font-prose: 'EB Garamond', 'Noto Serif TC', serif;
+  --font-display: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
+  --font-prose: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Theme Defaults (Light Mode - Monochrome with Pastel Accent) */
@@ -129,11 +129,11 @@ button {
 }
 
 .tc-informational {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'Chiron GoRound TC', 'Schoolbell', sans-serif;
 }
 
 .tc-ceremonial {
-  font-family: 'Noto Serif TC', serif;
+  font-family: 'Chiron GoRound TC', 'Schoolbell', sans-serif;
 }
 
 /* Swiper custom overrides */
@@ -172,4 +172,15 @@ button {
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
   background: var(--bg-secondary);
+}
+
+/* Responsive Swiper elements */
+@media (max-width: 768px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none !important;
+  }
+  .swiper-slide {
+    padding: 2rem 1rem 1rem !important;
+  }
 }

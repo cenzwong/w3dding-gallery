@@ -52,18 +52,20 @@ export default function Lightbox({ album, onClose, id = "lightbox-modal" }: Ligh
       aria-modal="true"
       aria-labelledby="lightbox-title-id"
     >
-      <div className="flex justify-between items-center p-6 border-b border-[var(--border-color)]">
-        <h2 id="lightbox-title-id" className="text-xl md:text-2xl display-text font-normal text-[var(--text-primary)]">
-          {album.titleTc} <span className="mx-2 text-[var(--border-color)]">|</span> {album.title}
+      <div className="flex justify-between items-center p-4 md:p-6 border-b border-[var(--border-color)] gap-4">
+        <h2 id="lightbox-title-id" className="text-base md:text-2xl display-text font-normal text-[var(--text-primary)] flex flex-wrap items-center gap-1.5 md:gap-3 leading-tight">
+          <span>{album.titleTc}</span>
+          <span className="text-[var(--border-color)] hidden md:inline">|</span>
+          <span className="text-xs md:text-xl text-[var(--text-secondary)] block md:inline w-full md:w-auto font-normal">{album.title}</span>
         </h2>
         <button
           id="close-lightbox"
-          className="w-12 h-12 flex items-center justify-center rounded-full bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-[var(--accent)] hover:text-white transition-colors duration-300"
+          className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 flex items-center justify-center rounded-full bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-[var(--accent)] hover:text-white transition-colors duration-300"
           onClick={onClose}
           aria-label="Close gallery"
           title="Close (Esc)"
         >
-          <X size={20} strokeWidth={1.5} />
+          <X size={18} strokeWidth={1.5} />
         </button>
       </div>
 
@@ -86,8 +88,8 @@ export default function Lightbox({ album, onClose, id = "lightbox-modal" }: Ligh
             className="w-full h-full"
           >
             {album.photos.map((photo, index) => (
-              <SwiperSlide key={photo.id} className="flex flex-col items-center justify-center p-4 md:p-12">
-                <div className="w-full h-[80vh] flex items-center justify-center relative">
+              <SwiperSlide key={photo.id} className="flex flex-col justify-between items-center h-full w-full py-4 px-4 md:py-8 md:px-12 box-border">
+                <div className="flex-1 w-full min-h-0 flex items-center justify-center relative">
                   <img
                     src={photo.url}
                     alt={photo.caption || `${album.title} photo ${index + 1}`}
@@ -96,7 +98,7 @@ export default function Lightbox({ album, onClose, id = "lightbox-modal" }: Ligh
                   />
                 </div>
                 {(photo.captionTc || photo.caption) && (
-                  <div className="mt-6 text-center max-w-2xl px-4">
+                  <div className="flex-shrink-0 mt-4 text-center max-w-2xl px-4 pb-8 w-full">
                     {photo.captionTc && <p className="text-sm text-[var(--text-secondary)] tc-informational mb-1">{photo.captionTc}</p>}
                     {photo.caption && <p className="text-sm prose-text text-[var(--text-secondary)] italic">{photo.caption}</p>}
                   </div>

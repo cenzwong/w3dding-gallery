@@ -9,20 +9,20 @@ interface AlbumGridProps {
 
 export default function AlbumGrid({ albums, onSelectAlbum, id = "album-grid" }: AlbumGridProps) {
   return (
-    <section id={id} className="py-12 md:py-24 px-6 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-8">
+    <section id={id} className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[var(--border-color)] border-y border-[var(--border-color)]">
         {albums.map((album, index) => (
           <motion.article
             key={album.id}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{
-              duration: 0.8,
-              delay: index * 0.1,
+              duration: 1.2,
+              delay: index * 0.15,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="group cursor-pointer flex flex-col gap-6"
+            className="group relative overflow-hidden h-[60vh] md:h-[85vh] cursor-pointer flex flex-col justify-end"
             onClick={() => onSelectAlbum(album.id)}
             role="button"
             tabIndex={0}
@@ -33,28 +33,30 @@ export default function AlbumGrid({ albums, onSelectAlbum, id = "album-grid" }: 
             }}
             aria-label={`Open ${album.title} album`}
           >
-            <div className="aspect-[4/5] w-full overflow-hidden bg-[var(--bg-secondary)] relative">
-               <img
-                  src={album.coverImage}
-                  alt={`${album.title} cover`}
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                  loading="lazy"
-                />
+            {/* Background Cover Image */}
+            <div className="absolute inset-0 w-full h-full overflow-hidden bg-[var(--bg-secondary)]">
+              <img
+                src={album.coverImage}
+                alt={`${album.title} cover`}
+                className="w-full h-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                loading="lazy"
+              />
+              {/* Vignette Overlay for Text Legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
             </div>
 
-            <div className="flex flex-col gap-2 px-1">
-              <div className="flex items-center gap-3">
-                 <h2 className="text-xl md:text-2xl display-text font-normal text-[var(--text-primary)]">
-                    {album.titleTc} <span className="mx-2 text-[var(--border-color)]">|</span> {album.title}
-                 </h2>
-              </div>
-              <p className="text-sm text-[var(--text-secondary)] tc-informational leading-relaxed">
-                 {album.descriptionTc} <br/>
-                 <span className="prose-text italic mt-1 block">{album.description}</span>
+            {/* Typography Overlay Content */}
+            <div className="relative z-10 px-8 py-16 md:px-16 md:py-24 flex flex-col items-center gap-3 text-center text-white">
+              <h2 className="text-2xl md:text-3xl display-text font-normal text-white drop-shadow-sm">
+                {album.titleTc} <span className="mx-2 opacity-40">|</span> {album.title}
+              </h2>
+              <p className="text-sm text-gray-200 tc-informational leading-relaxed max-w-md drop-shadow-sm">
+                {album.descriptionTc}
+                <span className="prose-text italic mt-2 block text-xs text-gray-300 opacity-90">{album.description}</span>
               </p>
-              <div className="mt-4 text-xs tracking-widest uppercase text-[var(--text-secondary)] border-t border-[var(--border-color)] pt-4 flex justify-between items-center group-hover:text-[var(--text-primary)] transition-colors duration-300">
-                <span className="font-mono">{album.photos.length} POSTS</span>
-                <span>EXPLORE &rarr;</span>
+              <div className="mt-4 text-xs tracking-widest uppercase text-gray-300 pt-3 border-t border-white/20 w-32 flex flex-col items-center gap-1.5 group-hover:text-white transition-colors duration-300">
+                <span className="font-mono">{album.photos.length} PHOTOS</span>
+                <span className="text-base leading-none transform translate-y-0 group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
               </div>
             </div>
           </motion.article>
