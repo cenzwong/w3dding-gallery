@@ -1,58 +1,32 @@
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { ALBUMS } from "./data/albums";
-import LandingHero from "./components/LandingHero";
-import AlbumGrid from "./components/AlbumGrid";
-import Lightbox from "./components/Lightbox";
-import ToggleTheme from "./components/ToggleTheme";
+import AlbumDirectory from "./components/AlbumDirectory";
+import PhotoWall from "./components/PhotoWall";
+import FullscreenModal from "./components/FullscreenModal";
 
 function App() {
-  const [selectedAlbumId, setSelectedAlbumId] = useState<string | null>(null);
+  const [currentAlbumId, setCurrentAlbumId] = useState<string | null>(null);
+  const [fullscreenUrl, setFullscreenUrl] = useState<string | null>(null);
 
-  const selectedAlbum = ALBUMS.find((album) => album.id === selectedAlbumId) || null;
+  const currentAlbum = ALBUMS.find((a) => a.id === currentAlbumId);
 
   return (
     <>
-      {/* Persistent Theme Toggle */}
-      <div className="absolute top-6 right-6 z-40">
-        <ToggleTheme id="theme-toggle" />
-      </div>
-
-      {/* Main Content */}
-      <main id="main-content" className="flex flex-col min-h-[100dvh] md:h-screen md:overflow-hidden">
-        {/* Hero Welcome Section */}
-        <LandingHero id="landing-hero" />
-
-        {/* Albums Showcase Grid */}
-        <div className="flex-1 min-h-0 flex flex-col">
-          <AlbumGrid
-            id="album-grid"
-            albums={ALBUMS}
-            onSelectAlbum={setSelectedAlbumId}
-          />
-        </div>
-
-        {/* Formal Acknowledgment Footer */}
-        <footer id="app-footer" className="py-8 md:py-6 flex-shrink-0 mt-auto">
-          <div className="container max-w-4xl mx-auto px-6 text-center">
-            <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-mono opacity-60">
-              ISSAC & CENZ <span className="mx-2">&copy;</span> 2026
-            </div>
-          </div>
-        </footer>
-      </main>
-
-      {/* Lightbox / Carousel Overlay */}
       <AnimatePresence mode="wait">
-        {selectedAlbumId && (
-          <Lightbox
-            key="lightbox"
-            id="lightbox-modal"
-            album={selectedAlbum}
-            onClose={() => setSelectedAlbumId(null)}
+        {!currentAlbumId ? (
+          <AlbumDirectory key="albums" albums={ALBUMS} onSelectAlbum={setCurrentAlbumId} />
+        ) : (
+          <PhotoWall
+            key="photowall"
+            album={currentAlbum!}
+            onBack={() => setCurrentAlbumId(null)}
+            onPhotoClick={setFullscreenUrl}
           />
         )}
       </AnimatePresence>
+
+      <FullscreenModal url={fullscreenUrl} onClose={() => setFullscreenUrl(null)} />
     </>
   );
 }

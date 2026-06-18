@@ -1,186 +1,54 @@
-/* ==========================================
-   DESIGN SYSTEM & CUSTOM PROPERTIES
-   ========================================== */
 @import "tailwindcss";
 
 @theme {
-  --font-display: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
-  --font-prose: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-accent: var(--accent);
-  --color-accent-muted: var(--accent-muted);
-  --color-border: var(--border-color);
-}
-
-:root {
-  /* Fonts */
-  --font-display: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
-  --font-prose: 'Schoolbell', 'Chiron GoRound TC', sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  /* Theme Defaults (Light Mode - Monochrome with Pastel Accent) */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #FDFBF7; /* Warm Cream */
-  --text-primary: #000000;
-  --text-secondary: #71717a;
-  --accent: #EAEFEA; /* Pale Sage */
-  --accent-muted: #F5EBEA; /* Rose Ash */
-  --border-color: #F4F5F7; /* Soft Slate */
-  --shadow-color: rgba(0, 0, 0, 0.05);
-  --overlay-bg: rgba(255, 255, 255, 0.95);
-
-  /* Swiper Variable Overrides */
-  --swiper-navigation-color: #000000;
-  --swiper-pagination-color: #EAEFEA;
-  --swiper-pagination-bullet-inactive-color: #F4F5F7;
-  --swiper-pagination-bullet-inactive-opacity: 0.5;
-  --swiper-navigation-size: 24px;
-}
-
-/* Dark Mode Variables (Obsidian Monochrome) */
-[data-theme="dark"] {
-  --bg-primary: #000000;
-  --bg-secondary: #111111;
-  --text-primary: #FFFFFF;
-  --text-secondary: #a1a1aa;
-  --accent: #4a5c46; /* Adjusted sage for dark contrast */
-  --accent-muted: #5e4644; /* Adjusted rose for dark contrast */
-  --border-color: #222222;
-  --shadow-color: rgba(255, 255, 255, 0.05);
-  --overlay-bg: rgba(0, 0, 0, 0.95);
-
-  /* Swiper Variable Overrides */
-  --swiper-navigation-color: #FFFFFF;
-}
-
-/* ==========================================
-   RESET & SYSTEM BASE
-   ========================================== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  font-size: 16px;
-  line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+  --font-sans: 'Noto Sans', 'Noto Sans HK', sans-serif;
 }
 
 body {
-  min-height: 100dvh;
+    font-family: 'Noto Sans', 'Noto Sans HK', sans-serif;
+    background-color: #000;
+    color: #fff;
+    overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile */
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* * Dense Grid Layout Engine
+ * Forces smaller items to backfill gaps created by spanning items
+ */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 130px; /* Base cell height */
+    gap: 2px;
+    grid-auto-flow: dense;
 }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-  background: none;
-  border: none;
+@media (min-width: 768px) {
+    .bento-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 200px;
+    }
 }
 
-/* Customized Scrollbar */
+/* Span Modifiers */
+.span-col-2 { grid-column: span 2; }
+.span-row-2 { grid-row: span 2; }
+
+.skeleton {
+    background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Hide scrollbar for seamless app-like UI */
 ::-webkit-scrollbar {
-  width: 6px;
+    display: none;
 }
-
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
-}
-
-.container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-.prose-text {
-  font-family: var(--font-prose);
-}
-
-.display-text {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.tc-informational {
-  font-family: 'Chiron GoRound TC', 'Schoolbell', sans-serif;
-}
-
-.tc-ceremonial {
-  font-family: 'Chiron GoRound TC', 'Schoolbell', sans-serif;
-}
-
-/* Swiper custom overrides */
-.swiper {
-  width: 100%;
-  height: 100%;
-  padding-bottom: 50px !important;
-}
-
-.swiper-slide {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  padding: 4rem 2rem 2rem;
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  transition: all 0.3s ease;
-}
-
-.swiper-button-prev::after,
-.swiper-button-next::after {
-  font-size: 1rem;
-  font-weight: 400;
-}
-
-.swiper-button-prev:hover,
-.swiper-button-next:hover {
-  background: var(--bg-secondary);
-}
-
-/* Responsive Swiper elements */
-@media (max-width: 768px) {
-  .swiper-button-prev,
-  .swiper-button-next {
-    display: none !important;
-  }
-  .swiper-slide {
-    padding: 2rem 1rem 1rem !important;
-  }
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
