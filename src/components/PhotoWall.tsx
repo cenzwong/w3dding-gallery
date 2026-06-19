@@ -112,6 +112,14 @@ function GalleryCard({
   return (
     <div
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
       className={`relative bg-gray-900 overflow-hidden group cursor-pointer transition-transform active:scale-95 ${spanClass}`}
     >
       {!loaded && <div className="skeleton absolute inset-0 z-10"></div>}

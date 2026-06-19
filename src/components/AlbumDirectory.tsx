@@ -36,6 +36,14 @@ function AlbumCard({ album, onClick }: { album: Album; onClick: () => void }) {
   return (
     <div
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
       className="cursor-pointer group relative aspect-square rounded-xl overflow-hidden bg-gray-900 border border-gray-800"
     >
       {!loaded && <div className="skeleton absolute inset-0 z-10"></div>}
