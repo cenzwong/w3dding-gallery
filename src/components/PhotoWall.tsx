@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import type { Album } from "../data/albums";
+import { useIsMobile } from "../hooks/useIsMobile";
+import { getOptimizedImageUrl } from "../utils/image";
 
 interface PhotoWallProps {
   album: Album;
@@ -10,6 +12,7 @@ interface PhotoWallProps {
 
 export default function PhotoWall({ album, onBack, onPhotoClick }: PhotoWallProps) {
   const [page, setPage] = useState(1);
+  const isMobile = useIsMobile();
   const batchSize = 15;
   const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -79,7 +82,7 @@ export default function PhotoWall({ album, onBack, onPhotoClick }: PhotoWallProp
         {displayedPhotos.map((photo, index) => (
           <GalleryCard
             key={photo.id}
-            url={photo.url}
+            url={isMobile ? getOptimizedImageUrl(photo.url, 800) : photo.url}
             caption={photo.caption}
             spanClass={spans[index]}
             onClick={() => onPhotoClick(photo.url)}

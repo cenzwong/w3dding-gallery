@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useIsMobile } from "../hooks/useIsMobile";
+import { getOptimizedImageUrl } from "../utils/image";
 
 interface FullscreenModalProps {
   url: string | null;
@@ -7,6 +9,7 @@ interface FullscreenModalProps {
 }
 
 export default function FullscreenModal({ url, onClose }: FullscreenModalProps) {
+  const isMobile = useIsMobile();
   useEffect(() => {
     if (url) {
       document.body.style.overflow = "hidden";
@@ -48,7 +51,7 @@ export default function FullscreenModal({ url, onClose }: FullscreenModalProps) 
             animate={{ scale: 1 }}
             exit={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            src={url}
+            src={isMobile ? getOptimizedImageUrl(url, 1600) : (url || undefined)}
             alt="Fullscreen view"
             className="max-w-full max-h-full object-contain"
           />

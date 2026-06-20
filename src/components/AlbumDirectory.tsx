@@ -1,6 +1,10 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { Album } from "../data/albums";
 import heroImage from "../assets/hero.jpg";
+import heroLandmarks from "../data/hero_landmarks.json";
+import { useIsMobile } from "../hooks/useIsMobile";
+import { getOptimizedImageUrl } from "../utils/image";
 
 interface AlbumDirectoryProps {
   albums: Album[];
@@ -8,6 +12,45 @@ interface AlbumDirectoryProps {
 }
 
 export default function AlbumDirectory({ albums, onSelectAlbum }: AlbumDirectoryProps) {
+  const isMobile = useIsMobile();
+  const [bgPosition, setBgPosition] = useState("right center");
+
+  useEffect(() => {
+    // Calculate average horizontal face center coordinate from landmarks JSON
+    const faces = heroLandmarks.results.faces;
+    const faceCenterX = faces.length > 0
+      ? faces.reduce((sum, face) => sum + (face.x + face.width / 2), 0) / faces.length
+      : 0.778; // Fallback to 77.8%
+
+    const updatePosition = () => {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const imgWidthRaw = 2560;
+      const imgHeightRaw = 1706;
+      const imgAspectRatio = imgWidthRaw / imgHeightRaw;
+      const screenAspectRatio = screenWidth / screenHeight;
+
+      if (screenAspectRatio < imgAspectRatio) {
+        // The screen aspect ratio is narrower than the image ratio, meaning the width is cropped.
+        // Height is the limiting factor (scaled to match container height).
+        const imgWidth = screenHeight * imgAspectRatio;
+        
+        // Compute P percentage to place the face center exactly at 50% screen width:
+        // P * (screenWidth - imgWidth) = screenWidth / 2 - faceCenterX * imgWidth
+        const P = (screenWidth / 2 - faceCenterX * imgWidth) / (screenWidth - imgWidth);
+        const clampedP = Math.max(0, Math.min(1, P));
+        setBgPosition(`${clampedP * 100}% center`);
+      } else {
+        // On screens wider than the image's aspect ratio, default to original alignment
+        setBgPosition("right center");
+      }
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    return () => window.removeEventListener("resize", updatePosition);
+  }, []);
+
   return (
     <motion.main
       initial={{ opacity: 0 }}
@@ -23,7 +66,7 @@ export default function AlbumDirectory({ albums, onSelectAlbum }: AlbumDirectory
           className="absolute inset-0 bg-cover bg-no-repeat z-0"
           style={{
             backgroundImage: `url(${heroImage})`,
-            backgroundPosition: "right center",
+            backgroundPosition: bgPosition,
           }}
         />
 
@@ -90,7 +133,7 @@ export default function AlbumDirectory({ albums, onSelectAlbum }: AlbumDirectory
             >
               {/* Cover Image */}
               <img
-                src={album.coverImage}
+                src={isMobile ? getOptimizedImageUrl(album.coverImage, 800) : album.coverImage}
                 alt={displayTitle}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
                 loading="lazy"
